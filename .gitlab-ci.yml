@@ -1,0 +1,23 @@
+image: node:latest
+
+stages:
+  - testing
+  - production
+
+testing:
+  type: testing
+  stage: testing
+  script:
+    - npm test
+
+production:
+  type: deploy
+  stage: production
+  image: ruby:latest
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=stijnschepprog4 --api-key=$HEROKU_API_KEY
+  only:
+    - master
